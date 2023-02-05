@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.interviewtask.R
+import com.example.interviewtask.databinding.ActivityHomeBinding
 import com.example.interviewtask.ui.AdapterCallback
 import com.example.interviewtask.ui.ListAdapter
 import com.example.interviewtask.databinding.ActivityMainBinding
@@ -28,43 +29,25 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
-    private val onDownloadComplete = object : BroadcastReceiver() {
-        override fun onReceive(p0: Context?, p1: Intent?) {
-            val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-
-            if (downloadID === id) {
-                Toast.makeText(this@HomeActivity, "Downloaded", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this@HomeActivity, "File not fount", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 
     private val viewModel: HomeVM by viewModels()
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityHomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-      //  Thread.setDefaultUncaughtExceptionHandler(ExceptionHandler(this))
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        //  Thread.setDefaultUncaughtExceptionHandler(ExceptionHandler(this))
+        binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
         initRV()
-        registerReceiver(
-            onDownloadComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
-        )
+
         requestPermission()
         setObserver()
         getApiData()
-        val v = 2 / 0
-        print("" + v)
     }
 
 
     override fun onDestroy() {
-        unregisterReceiver(onDownloadComplete)
-        super.onDestroy()
+                super.onDestroy()
     }
 
     private var adapter: ListAdapter? = null
@@ -74,17 +57,12 @@ class HomeActivity : AppCompatActivity() {
                 Log.i("abc", bean.path)
                 when (v.id) {
                     R.id.ivDownload -> {
-                        downloadFile(bean.name, "File", bean.path)
+
                     }
                 }
             }
         })
-        binding.rv.addItemDecoration(
-            DividerItemDecoration(
-                this, DividerItemDecoration.VERTICAL
-            )
-        )
-        binding.rv.adapter = adapter
+
     }
 
     private fun setObserver() {
@@ -92,20 +70,6 @@ class HomeActivity : AppCompatActivity() {
             adapter?.setList(it)
 
         }
-    }
-
-    private var downloadID: Long? = null
-    private fun downloadFile(fileName: String, desc: String, url: String) {
-        // fileName -> fileName with extension
-        val request = DownloadManager.Request(Uri.parse(url))
-            .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
-            .setTitle(fileName).setDescription(desc)
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            .setAllowedOverMetered(true).setAllowedOverRoaming(false)
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
-        val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        downloadID = downloadManager.enqueue(request)
-
     }
 
     private fun requestPermission() {

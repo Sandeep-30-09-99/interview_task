@@ -14,7 +14,7 @@ typealias UserId = String
 
 data class UserEntity(val id: UserId, val name: String)
 
-data class CommentEntity(val id: String, val content: String3)
+data class CommentEntity(val id: String, val content: String)
 
 data class FriendEntity(val id: String, val name: String)
 

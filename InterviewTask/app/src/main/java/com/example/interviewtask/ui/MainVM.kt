@@ -2,13 +2,13 @@ package com.example.interviewtask.ui
 
 import androidx.lifecycle.ViewModel
 import com.example.interviewtask.model.Data
-import com.example.interviewtask.network.ApiHelper
+
 import com.example.interviewtask.util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MainVM @Inject constructor(val apiService: ApiHelper) : ViewModel() {
+class MainVM @Inject constructor() : ViewModel() {
 
 
     var apiData = SingleLiveEvent<ArrayList<Data>>()
