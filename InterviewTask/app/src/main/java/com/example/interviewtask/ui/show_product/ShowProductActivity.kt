@@ -16,6 +16,7 @@ import com.example.interviewtask.ui.AdapterCallback
 import com.example.interviewtask.ui.ProductAdapter
 import com.example.interviewtask.model.Product
 import com.example.interviewtask.ui.create_product.CreateProductActivity
+import com.example.interviewtask.ui.view_photo.ViewPhotoActivity
 import com.example.interviewtask.util.Coroutine
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,6 +46,7 @@ class ShowProductActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //  Thread.setDefaultUncaughtExceptionHandler(ExceptionHandler(this))
         binding = ActivityShowProductBinding.inflate(layoutInflater)
+        binding.header.title.text = "Product List"
         initDatabase()
         setContentView(binding.root)
         binding.vm = viewModel
@@ -71,7 +73,12 @@ class ShowProductActivity : AppCompatActivity() {
 
                     }
                     R.id.sivProfile -> {
-
+                        startActivity(
+                            ViewPhotoActivity.intent(
+                                this@ShowProductActivity,
+                                bean.product_photo
+                            )
+                        )
                     }
                 }
             }
