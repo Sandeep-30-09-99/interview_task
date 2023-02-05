@@ -59,17 +59,27 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     implementation 'androidx.activity:activity-ktx:1.6.1'
 
+    implementation 'com.google.code.gson:gson:2.9.0'
+
     // for dimension
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
     implementation 'com.intuit.ssp:ssp-android:1.1.0'
 
 
-    //
-    implementation 'androidx.room:room-runtime:2.2.5'
-    annotationProcessor 'androidx.room:room-compiler:2.2.5'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.2.0'
+    ext {
+        roomVersion = '2.1.0-alpha06'
+    }
 
+// Room components
+    implementation "androidx.room:room-runtime:2.5.0"
+    implementation "androidx.room:room-ktx:2.5.0"
+    kapt "androidx.room:room-compiler:2.5.0"
+    androidTestImplementation "androidx.room:room-testing:2.5.0"
+
+   /* def coroutinesVersion = '1.5.0'
+    // Kotlin Coroutines
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"*/
 
 
 }

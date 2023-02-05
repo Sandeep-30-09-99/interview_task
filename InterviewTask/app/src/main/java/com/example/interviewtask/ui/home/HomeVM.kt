@@ -11,11 +11,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeVM @Inject constructor(/*val apiService: ApiHelper*/) : BaseViewModel() {
-
-    var apiData = SingleLiveEvent<ArrayList<Data>>()
-    fun getApiData() {
-
-    }
+class HomeVM @Inject constructor() : BaseViewModel() {
 
 }

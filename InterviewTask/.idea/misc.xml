@@ -3,8 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Interview_task/interview_task/InterviewTask/app/src/main/res/drawable/background_10_rounded.xml" value="0.1295" />
+        <entry key="..\:/Interview_task/interview_task/InterviewTask/app/src/main/res/drawable/background_10_rounded_white.xml" value="0.1295" />
+        <entry key="..\:/Interview_task/interview_task/InterviewTask/app/src/main/res/drawable/button.xml" value="0.1295" />
+        <entry key="..\:/Interview_task/interview_task/InterviewTask/app/src/main/res/drawable/ic_close.xml" value="0.1" />
+        <entry key="..\:/Interview_task/interview_task/InterviewTask/app/src/main/res/drawable/ic_danger.xml" value="0.1" />
+        <entry key="..\:/Interview_task/interview_task/InterviewTask/app/src/main/res/drawable/ic_info.xml" value="0.1" />
+        <entry key="..\:/Interview_task/interview_task/InterviewTask/app/src/main/res/drawable/ic_tick.xml" value="0.1" />
+        <entry key="..\:/Interview_task/interview_task/InterviewTask/app/src/main/res/layout/activity_create.xml" value="0.21770833333333334" />
+        <entry key="..\:/Interview_task/interview_task/InterviewTask/app/src/main/res/layout/activity_create_product.xml" value="0.2171875" />
         <entry key="..\:/Interview_task/interview_task/InterviewTask/app/src/main/res/layout/activity_home.xml" value="0.165" />
         <entry key="..\:/Interview_task/interview_task/InterviewTask/app/src/main/res/layout/activity_main.xml" value="0.22135416666666666" />
+        <entry key="..\:/Interview_task/interview_task/InterviewTask/app/src/main/res/layout/activity_show_product.xml" value="0.21770833333333334" />
+        <entry key="..\:/Interview_task/interview_task/InterviewTask/app/src/main/res/layout/layout_ok.xml" value="0.22135416666666666" />
+        <entry key="..\:/Interview_task/interview_task/InterviewTask/app/src/main/res/layout/list_view.xml" value="0.21770833333333334" />
+        <entry key="..\:/Interview_task/interview_task/InterviewTask/app/src/main/res/layout/toast_layout.xml" value="0.1" />
       </map>
     </option>
   </component>

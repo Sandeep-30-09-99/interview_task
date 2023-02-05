@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.interviewtask.R
 import com.example.interviewtask.databinding.ListViewBinding
-import com.example.interviewtask.model.Data
+import com.example.interviewtask.model.Product
 
-class ListAdapter(val context: Context, val listener: AdapterCallback) :
-    RecyclerView.Adapter<ListAdapter.Holder>() {
+class ProductAdapter(val context: Context, val listener: AdapterCallback) :
+    RecyclerView.Adapter<ProductAdapter.Holder>() {
 
-    private var list = ArrayList<Data>()
+    private var list = ArrayList<Product>()
 
 
     class Holder(binding: ListViewBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -36,14 +36,24 @@ class ListAdapter(val context: Context, val listener: AdapterCallback) :
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.binding.bean = list[position]
-        Glide.with(context).load(list[position].path).into(holder.binding.iv)
+        Glide.with(context).load(list[position].product_photo).into(holder.binding.iv)
         holder.binding.iv
+        holder.binding.pos = position
         holder.binding.callback = listener
-        //holder.binding.
     }
 
+    fun getList(): ArrayList<Product> {
+        return this.list
+    }
+
+    fun removeAt(position: Int) {
+        this.list.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+
     @SuppressLint("NotifyDataSetChanged")
-    fun setList(data: ArrayList<Data>) {
+    fun setList(data: ArrayList<Product>) {
         this.list = data
         notifyDataSetChanged()
     }

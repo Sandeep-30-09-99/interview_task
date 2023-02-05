@@ -17,9 +17,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.example.interviewtask.R
 import com.example.interviewtask.databinding.ActivityMainBinding
 import com.example.interviewtask.model.Data
+import com.example.interviewtask.model.Product
 import com.example.interviewtask.util.ExceptionHandler
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -98,15 +98,12 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private var adapter: ListAdapter? = null
+    private var adapter: ProductAdapter? = null
     private fun initRV() {
-        adapter = ListAdapter(this, object : AdapterCallback {
-            override fun onViewClick(v: View, bean: Data) {
-                Log.i("abc", bean.path)
+        adapter = ProductAdapter(this, object : AdapterCallback {
+            override fun onViewClick(v: View, pos:Int,bean: Product) {
                 when (v.id) {
-                    R.id.ivDownload -> {
-                        downloadFile(bean.name, "File", bean.path)
-                    }
+
                 }
             }
         })
@@ -120,7 +117,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setObserver() {
         viewModel.apiData.observe(this) {
-            adapter?.setList(it)
+          //  adapter?.setList(it)
 
         }
     }

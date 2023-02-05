@@ -2,27 +2,21 @@ package com.example.interviewtask.ui.home
 
 
 import android.Manifest
-import android.app.DownloadManager
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.lifecycle.Observer
 import com.example.interviewtask.R
 import com.example.interviewtask.databinding.ActivityHomeBinding
 import com.example.interviewtask.ui.AdapterCallback
-import com.example.interviewtask.ui.ListAdapter
-import com.example.interviewtask.databinding.ActivityMainBinding
+import com.example.interviewtask.ui.ProductAdapter
 import com.example.interviewtask.model.Data
+import com.example.interviewtask.model.Product
+import com.example.interviewtask.ui.create_product.CreateProductActivity
+import com.example.interviewtask.ui.show_product.ShowProductActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -37,49 +31,23 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //  Thread.setDefaultUncaughtExceptionHandler(ExceptionHandler(this))
         binding = ActivityHomeBinding.inflate(layoutInflater)
+        binding.vm = viewModel
         setContentView(binding.root)
-        initRV()
-
-        requestPermission()
-        setObserver()
-        getApiData()
+        listenClicks()
     }
 
+    private fun listenClicks() {
+        viewModel.onClick.observe(this, Observer {
+            when (it.id) {
+                R.id.show_product -> {
+                    startActivity(ShowProductActivity.intent(this))
+                }
+                R.id.create_product -> {
+                    startActivity(CreateProductActivity.intent(this))
 
-    override fun onDestroy() {
-                super.onDestroy()
-    }
-
-    private var adapter: ListAdapter? = null
-    private fun initRV() {
-        adapter = ListAdapter(this, object : AdapterCallback {
-            override fun onViewClick(v: View, bean: Data) {
-                Log.i("abc", bean.path)
-                when (v.id) {
-                    R.id.ivDownload -> {
-
-                    }
                 }
             }
         })
-
-    }
-
-    private fun setObserver() {
-        viewModel.apiData.observe(this) {
-            adapter?.setList(it)
-
-        }
-    }
-
-    private fun requestPermission() {
-        ActivityCompat.requestPermissions(
-            this@HomeActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 12
-        )
-    }
-
-    private fun getApiData() {
-        viewModel.getApiData()
     }
 
 

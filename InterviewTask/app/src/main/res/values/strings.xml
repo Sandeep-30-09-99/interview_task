@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">InterviewTask</string>
+    <string name="name">Name</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="desc">Enter Description </string>
+    <string name="neccessary_permission">These permissions are necessary for the task.</string>
 </resources>
