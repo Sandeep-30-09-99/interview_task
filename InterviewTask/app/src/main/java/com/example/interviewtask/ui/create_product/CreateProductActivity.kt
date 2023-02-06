@@ -11,23 +11,18 @@ import android.os.Environment
 import android.os.StrictMode
 import android.provider.MediaStore
 import android.text.TextUtils
-import android.util.Log
-import android.view.View
 import android.widget.PopupMenu
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.example.interviewtask.R
 import com.example.interviewtask.databinding.ActivityCreateProductBinding
 import com.example.interviewtask.databinding.LayoutOkBinding
 import com.example.interviewtask.local_storage.ProductDao
 import com.example.interviewtask.local_storage.ProductDatabase
-import com.example.interviewtask.ui.AdapterCallback
-import com.example.interviewtask.ui.ProductAdapter
-import com.example.interviewtask.model.Data
+
 import com.example.interviewtask.model.Product
-import com.example.interviewtask.ui.show_product.ShowProductActivity
 import com.example.interviewtask.util.Constant
 import com.example.interviewtask.util.Coroutine
 import com.example.interviewtask.util.dialog.BaseCustomDialog
@@ -68,12 +63,13 @@ class CreateProductActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= 33) {
             intent?.getParcelableExtra<Product>(Constant.PRODUCT, Product::class.java)?.let {
                 product = it
-                binding.bean = it
+                setDetails(it)
             }
         } else {
             intent?.getParcelableExtra<Product>(Constant.PRODUCT)?.let {
                 product = it
-                binding.bean = it
+
+                setDetails(it)
             }
         }
         setHeader()
@@ -83,6 +79,15 @@ class CreateProductActivity : AppCompatActivity() {
         initPermissionRequiredForTaskDialog()
         setObserver()
         listenClicks()
+    }
+
+    private fun setDetails(product: Product?) {
+        product?.let {
+            binding.bean = it
+            if (it.product_photo != null) {
+                binding.sivProfile.setImageURI(it.product_photo.toUri())
+            }
+        }
     }
 
     private fun setHeader() {
