@@ -4,7 +4,7 @@ package com.example.interviewtask.ui.show_product
 import androidx.lifecycle.LiveData
 import com.example.interviewtask.local_storage.DatabaseRepoistry
 import com.example.interviewtask.local_storage.ProductDao
-import com.example.interviewtask.model.Data
+
 import com.example.interviewtask.model.Product
 
 import com.example.interviewtask.ui.base.BaseViewModel

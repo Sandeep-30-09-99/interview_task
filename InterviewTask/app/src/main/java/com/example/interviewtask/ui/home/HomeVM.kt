@@ -1,7 +1,7 @@
 package com.example.interviewtask.ui.home
 
 
-import com.example.interviewtask.model.Data
+
 
 import com.example.interviewtask.ui.base.BaseViewModel
 import com.example.interviewtask.util.SingleLiveEvent

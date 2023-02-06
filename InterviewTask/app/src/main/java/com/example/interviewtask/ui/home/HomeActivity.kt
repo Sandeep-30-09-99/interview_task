@@ -13,7 +13,7 @@ import com.example.interviewtask.R
 import com.example.interviewtask.databinding.ActivityHomeBinding
 import com.example.interviewtask.ui.AdapterCallback
 import com.example.interviewtask.ui.ProductAdapter
-import com.example.interviewtask.model.Data
+
 import com.example.interviewtask.model.Product
 import com.example.interviewtask.ui.create_product.CreateProductActivity
 import com.example.interviewtask.ui.show_product.ShowProductActivity

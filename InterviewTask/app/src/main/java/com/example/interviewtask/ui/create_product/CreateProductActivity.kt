@@ -77,7 +77,6 @@ class CreateProductActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.vm = viewModel
         initPermissionRequiredForTaskDialog()
-        setObserver()
         listenClicks()
     }
 
@@ -187,14 +186,7 @@ class CreateProductActivity : AppCompatActivity() {
     }
 
 
-    private fun setObserver() {
-        viewModel.apiData.observe(this) {
-        }
-    }
 
-    private fun getApiData() {
-        viewModel.getApiData()
-    }
 
     private lateinit var allGranted: ArrayList<Boolean>
 
