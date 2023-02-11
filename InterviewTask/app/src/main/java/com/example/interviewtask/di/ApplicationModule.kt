@@ -34,7 +34,7 @@ class ApplicationModule {
     @Provides
     fun getRetrofit(): Retrofit {
         val gson = GsonBuilder().create()
-        return Retrofit.Builder().baseUrl("https://fileupload.vinnisoft.com/")
+        return Retrofit.Builder().baseUrl("https://newsapi.org/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(provideOkHttpClient())
             .build()

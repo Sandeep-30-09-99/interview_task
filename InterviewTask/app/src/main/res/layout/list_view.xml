@@ -5,7 +5,7 @@
 
         <variable
             name="bean"
-            type="com.example.interviewtask.model.Product" />
+            type="com.example.interviewtask.model.Article" />
 
         <variable
             name="pos"
@@ -75,7 +75,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:onClick="@{v->callback.onViewClick(v,pos,bean)}"
             android:paddingHorizontal="@dimen/_5sdp"
-            android:text="@{bean.name}"
+            android:text="@{bean.description}"
             android:textAlignment="viewStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv"
@@ -90,7 +90,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:onClick="@{v->callback.onViewClick(v,pos,bean)}"
             android:paddingHorizontal="@dimen/_5sdp"
-            android:text='@{"$ "+bean.regular_price.toString()}'
+            android:text='@{"$ "+bean.content}'
             android:textAlignment="viewStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv"
@@ -105,7 +105,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:onClick="@{v->callback.onViewClick(v,pos,bean)}"
             android:paddingHorizontal="@dimen/_5sdp"
-            android:text='@{"$ "+bean.sale_price.toString()}'
+
             android:textAlignment="viewStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv"

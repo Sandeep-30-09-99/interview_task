@@ -10,12 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.interviewtask.R
 import com.example.interviewtask.databinding.ListViewBinding
+import com.example.interviewtask.model.Article
 import com.example.interviewtask.model.Product
 
 class ProductAdapter(val context: Context, val listener: AdapterCallback) :
     RecyclerView.Adapter<ProductAdapter.Holder>() {
 
-    private var list = ArrayList<Product>()
+    private var list = ArrayList<Article>()
 
 
     class Holder(binding: ListViewBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -36,13 +37,13 @@ class ProductAdapter(val context: Context, val listener: AdapterCallback) :
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.binding.bean = list[position]
-        Glide.with(context).load(list[position].product_photo).into(holder.binding.iv)
+        Glide.with(context).load(list[position].urlToImage).into(holder.binding.iv)
         holder.binding.iv
         holder.binding.pos = position
         holder.binding.callback = listener
     }
 
-    fun getList(): ArrayList<Product> {
+    fun getList(): ArrayList<Article> {
         return this.list
     }
 
@@ -53,7 +54,7 @@ class ProductAdapter(val context: Context, val listener: AdapterCallback) :
 
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setList(data: ArrayList<Product>) {
+    fun setList(data: ArrayList<Article>) {
         this.list = data
         notifyDataSetChanged()
     }

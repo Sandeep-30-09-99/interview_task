@@ -4,8 +4,10 @@ package com.example.interviewtask.ui.show_product
 import androidx.lifecycle.LiveData
 import com.example.interviewtask.local_storage.DatabaseRepoistry
 import com.example.interviewtask.local_storage.ProductDao
+import com.example.interviewtask.model.Article
 
 import com.example.interviewtask.model.Product
+import com.example.interviewtask.network.ApiHelper
 
 import com.example.interviewtask.ui.base.BaseViewModel
 import com.example.interviewtask.util.Coroutine
@@ -20,24 +22,20 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
-class ShowProductVM @Inject constructor(/*val productDao: ProductDao*/) : BaseViewModel() {
+class ShowProductVM @Inject constructor(val apiHelper: ApiHelper) : BaseViewModel() {
 
+    val articleList = SingleLiveEvent<List<Article>>()
+    fun getTopHeadLines() {
+        Coroutine.IO({
+            val response = apiHelper.getHeadlines()
+            if (response.isSuccessful) {
+                articleList.postValue(response.body()?.articles)
+            }else{
 
+            }
+        }, CoroutineExceptionHandler { _, e ->
 
-
-/*
-    @Inject
-    lateinit var productDao: DatabaseRepoistry*//*
-
-
-    fun getProductList(): LiveData<List<Product>> {
-       // return productDao.getProduct()
+        })
     }
-
-    fun deleteProduct(id: Int) {
-        Coroutine.IO {
-          //  productDao.deleteProductById(id)
-        }
-    }*/
 
 }

@@ -38,38 +38,37 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * <p>
  * Note that only one observer is going to be notified of changes.
  */
-public class SingleLiveEvent<T> extends MutableLiveData<T> {
+public class SingleLiveEvent<T>extends MutableLiveData<Resource<T>> {
     private final AtomicBoolean mPending = new AtomicBoolean(false);
 
-    @MainThread
-    public void observe(@NonNull LifecycleOwner owner, @NonNull final Observer<? super T> observer) {
-
+    @Override
+    public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super Resource<T>> observer) {
         if (hasActiveObservers()) {
-            Log.d("LOG", "Multiple observers registered but only one will be notified of changes.");
+            Log.d("LiveDataEvent", "Multiple observers registered but only one will be notified of changes.");
         }
-
-        // Observe the internal MutableLiveData
-        super.observe(owner, new Observer<T>() {
+        super.observe(owner, new Observer<Resource<T>>() {
             @Override
-            public void onChanged(@Nullable T t) {
+            public void onChanged(Resource<T> tResource) {
                 if (mPending.compareAndSet(true, false)) {
-                    observer.onChanged(t);
+                    observer.onChanged(tResource);
                 }
             }
         });
     }
 
-    @MainThread
-    public void setValue(@Nullable T t) {
+
+    @Override
+    public void setValue(Resource<T> value) {
         mPending.set(true);
-        super.setValue(t);
+        if (value != null)
+            super.setValue(value);
     }
 
-    @MainThread
-    public void postValue(@Nullable T t) {
+    @Override
+    public void postValue(Resource<T> value) {
         mPending.set(true);
-        if (t != null)
-            super.postValue(t);
+        if (value != null)
+            super.postValue(value);
     }
 
     /**
@@ -79,4 +78,6 @@ public class SingleLiveEvent<T> extends MutableLiveData<T> {
     public void call() {
         setValue(null);
     }
+
 }
+

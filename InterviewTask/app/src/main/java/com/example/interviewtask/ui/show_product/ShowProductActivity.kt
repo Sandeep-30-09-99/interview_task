@@ -12,6 +12,7 @@ import com.example.interviewtask.R
 import com.example.interviewtask.databinding.ActivityShowProductBinding
 import com.example.interviewtask.local_storage.ProductDao
 import com.example.interviewtask.local_storage.ProductDatabase
+import com.example.interviewtask.model.Article
 import com.example.interviewtask.ui.AdapterCallback
 import com.example.interviewtask.ui.ProductAdapter
 import com.example.interviewtask.model.Product
@@ -89,23 +90,23 @@ class ShowProductActivity : AppCompatActivity() {
 
 
     private fun listenClicks() {
-        viewModel.onClick.observe(this, Observer {
+     /*   viewModel.onClick.observe(this, Observer {
             when (it.id) {
                 R.id.iv -> {
                 }
             }
-        })
+        })*/
 
     }
 
     private fun setObserver() {
+      /*  if (it.size > 0) {
+            productAdapter?.setList(
+                it as ArrayList<Article>
+            )
+        }*/
         productDao.getProductList().observe(this) {
-            if (it.size > 0) {
-                productAdapter?.setList(
-                    it as ArrayList<Product>
 
-                )
-            }
         }
 
     }
