@@ -37,8 +37,6 @@ class ProductAdapter(val context: Context, val listener: AdapterCallback) :
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.binding.bean = list[position]
-        Glide.with(context).load(list[position].urlToImage).into(holder.binding.iv)
-        holder.binding.iv
         holder.binding.pos = position
         holder.binding.callback = listener
     }

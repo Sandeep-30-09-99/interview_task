@@ -28,15 +28,15 @@ class ApplicationModule {
     fun provideOkHttpClient(): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        return OkHttpClient.Builder().build()
+        return OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
     }
 
     @Provides
-    fun getRetrofit(): Retrofit {
-        val gson = GsonBuilder().create()
+    fun getRetrofit(client:OkHttpClient): Retrofit {
+        val gson = GsonBuilder().setLenient().create()
         return Retrofit.Builder().baseUrl("https://newsapi.org/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(provideOkHttpClient())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(client)
             .build()
 
     }

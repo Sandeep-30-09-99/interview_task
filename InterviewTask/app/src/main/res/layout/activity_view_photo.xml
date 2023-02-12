@@ -7,6 +7,10 @@
 
         <import type="android.view.View" />
 
+        <variable
+            name="bean"
+            type="com.example.interviewtask.model.Article" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,26 +20,89 @@
 
         <include
             android:id="@+id/header"
-            layout="@layout/header"
-           />
+            layout="@layout/header" />
 
-
-        <ImageView
-            android:id="@+id/sivProfile"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:elevation="@dimen/_5sdp"
-            android:paddingHorizontal="@dimen/_30sdp"
-            android:paddingVertical="@dimen/_15sdp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_dummy_img"
-            android:theme="@style/CornerCircular"
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/_10sdp"
+            android:indeterminateTint="@color/colorPrimary"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header"
-            app:strokeColor="@color/white"
-            app:strokeWidth="@dimen/_7sdp" />
+            app:layout_constraintTop_toBottomOf="@+id/header" />
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header" />
+
+        <!--    <ImageView
+                android:id="@+id/sivProfile"
+                set_img="@{bean.urlToImage}"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:elevation="@dimen/_5sdp"
+                android:paddingHorizontal="@dimen/_30sdp"
+                android:paddingVertical="@dimen/_15sdp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_dummy_img"
+                android:theme="@style/CornerCircular"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent=".3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/header"
+                app:strokeColor="@color/white"
+                app:strokeWidth="@dimen/_7sdp" />
+
+            <TextView
+                android:id="@+id/tvSourceName"
+                style="@style/TextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/_5sdp"
+                android:text='@{bean.source.name}'
+                android:textAlignment="viewStart"
+                app:layout_constraintEnd_toStartOf="@+id/tvTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sivProfile"
+                tools:text="source name " />
+
+            <TextView
+                android:id="@+id/tvTime"
+                style="@style/TextView"
+                set_time="@{bean.publishedAt}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:paddingHorizontal="@dimen/_5sdp"
+                android:textAlignment="viewEnd"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvSourceName"
+                app:layout_constraintTop_toBottomOf="@+id/sivProfile"
+                tools:text="$ 5.5" />
+
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvSourceName">
+
+                <TextView
+                    android:id="@+id/tvNews"
+                    set_html_text="@{bean.content}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </ScrollView>-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

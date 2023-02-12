@@ -7,7 +7,5 @@ import retrofit2.Response
 
 
 interface ApiHelper {
-
-    fun getHeadlines(): Response<NewsApiResponse>
-
+   suspend fun getHeadlines(): Response<NewsApiResponse>
 }

@@ -23,15 +23,17 @@
         android:layout_height="wrap_content"
         android:padding="10dp">
 
+
+
         <ImageView
             android:id="@+id/ivDelete"
             android:layout_width="40dp"
             android:layout_height="40dp"
-
             android:layout_margin="5dp"
             android:onClick="@{v->callback.onViewClick(v,pos,bean)}"
             android:padding="3dp"
             android:src="@drawable/ic_delete"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -43,13 +45,15 @@
             android:onClick="@{v->callback.onViewClick(v,pos,bean)}"
             android:padding="3dp"
             android:src="@drawable/ic_baseline_edit_24"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ivDelete" />
 
         <ImageView
             android:id="@+id/iv"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_100sdp"
+            set_img="@{bean.urlToImage}"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_140sdp"
             android:onClick="@{v->callback.onViewClick(v,pos,bean)}"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_dummy_img"
@@ -62,54 +66,56 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/_4sdp"
-            android:background="@color/black"
+
+            android:background="@color/grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv" />
+            app:layout_constraintTop_toBottomOf="@+id/tvSourceName" />
 
         <TextView
-            android:id="@+id/tvProductName"
+            android:id="@+id/tvHeadLine"
             style="@style/TextView.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:onClick="@{v->callback.onViewClick(v,pos,bean)}"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:text="@{bean.title}"
+            android:textAlignment="viewStart"
+            android:textSize="@dimen/_13ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv"
+            tools:text="Description" />
+
+        <TextView
+            android:id="@+id/tvSourceName"
+            style="@style/TextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{v->callback.onViewClick(v,pos,bean)}"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:text='@{"Source:"+bean.source.name}'
+            android:textAlignment="viewStart"
+            app:layout_constraintEnd_toStartOf="@+id/tvTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvHeadLine"
+            tools:text="source name " />
+
+        <TextView
+            android:id="@+id/tvTime"
+            style="@style/TextView"
+            set_time="@{bean.publishedAt}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
             android:onClick="@{v->callback.onViewClick(v,pos,bean)}"
             android:paddingHorizontal="@dimen/_5sdp"
-            android:text="@{bean.description}"
-            android:textAlignment="viewStart"
+            android:textAlignment="viewEnd"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="File Name" />
-
-        <TextView
-            android:id="@+id/tvNormalPrice"
-            style="@style/TextView.Medium"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:onClick="@{v->callback.onViewClick(v,pos,bean)}"
-            android:paddingHorizontal="@dimen/_5sdp"
-            android:text='@{"$ "+bean.content}'
-            android:textAlignment="viewStart"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv"
-            app:layout_constraintTop_toBottomOf="@+id/tvProductName"
-            tools:text="$ 7.59" />
-
-        <TextView
-            android:id="@+id/tvSalePrice"
-            style="@style/TextView.Medium"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:onClick="@{v->callback.onViewClick(v,pos,bean)}"
-            android:paddingHorizontal="@dimen/_5sdp"
-
-            android:textAlignment="viewStart"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv"
-            app:layout_constraintTop_toBottomOf="@+id/tvNormalPrice"
+            app:layout_constraintStart_toEndOf="@+id/tvSourceName"
+            app:layout_constraintTop_toBottomOf="@+id/tvHeadLine"
             tools:text="$ 5.5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

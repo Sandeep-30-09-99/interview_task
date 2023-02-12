@@ -2,10 +2,9 @@
 <layout>
 
     <data>
-
         <variable
             name="vm"
-            type="com.example.interviewtask.ui.show_product.ShowProductVM" />
+            type="com.example.interviewtask.ui.article.ArticleVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

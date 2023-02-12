@@ -1,8 +1,9 @@
 package com.example.interviewtask.ui
 
 import android.view.View
+import com.example.interviewtask.model.Article
 import com.example.interviewtask.model.Product
 
 interface AdapterCallback {
-    fun onViewClick(v: View, pos:Int,bean: Product)
+    fun onViewClick(v: View, pos:Int,bean: Article)
 }
