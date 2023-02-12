@@ -11,14 +11,18 @@ import android.os.Environment
 import android.print.PdfPrint
 import android.print.PrintAttributes
 import android.provider.Settings
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.webkit.*
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import com.example.interviewtask.databinding.ActivityViewPhotoBinding
+import com.example.interviewtask.local_storage.ProductDao
+import com.example.interviewtask.local_storage.ProductDatabase
 import com.example.interviewtask.model.Article
 import com.example.interviewtask.util.Constant
+import com.example.interviewtask.util.Coroutine
 import com.example.interviewtask.util.showErrorToast
 import com.example.interviewtask.util.showInfoToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,13 +33,22 @@ import java.io.File
 class FullArticleActivity : AppCompatActivity() {
 
     companion object {
-        fun intent(activity: Activity, photo: Article? = null): Intent {
+        fun intent(
+            activity: Activity, photo: Article? = null, loadFromFile: Boolean = false
+        ): Intent {
             val intent = Intent(activity, FullArticleActivity::class.java)
             intent.putExtra(Constant.ARTICLE, photo)
+            intent.putExtra(Constant.LOAD_FROM_FILE, loadFromFile)
             return intent
         }
     }
 
+
+    private var loadFromFile: Boolean = false
+    lateinit var productDao: ProductDao
+    private fun initDatabase() {
+        productDao = ProductDatabase.getInstance(this).noteDao()
+    }
 
     private var article: Article? = null
     private lateinit var binding: ActivityViewPhotoBinding
@@ -43,9 +56,11 @@ class FullArticleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityViewPhotoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.webView.settings.domStorageEnabled
         binding.header.threeDot.visibility = View.VISIBLE
         binding.header.title.text = "Article"
         getIntentExtras()
+        initDatabase()
         setClickListener()
         if (Build.VERSION.SDK_INT >= 30) {
             if (!Environment.isExternalStorageManager()) {
@@ -67,7 +82,6 @@ class FullArticleActivity : AppCompatActivity() {
 
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
-                //  view.saveWebArchive("" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + File.separator + "myArchive" + ".pdf");
                 binding.progress.visibility = View.GONE
             }
         }
@@ -82,7 +96,7 @@ class FullArticleActivity : AppCompatActivity() {
         binding.webView.settings.setSupportZoom(true)
         binding.webView.settings.builtInZoomControls = true
         binding.webView.settings.displayZoomControls = false
-        loadArchive()
+        if (loadFromFile) loadArchive()
     }
 
     private fun setClickListener() {
@@ -101,8 +115,11 @@ class FullArticleActivity : AppCompatActivity() {
                 article = it
             }
         }
+        intent?.getBooleanExtra(Constant.LOAD_FROM_FILE, false)?.let {
+            loadFromFile = it
+        }
         article?.url?.let {
-            //  binding.webView.loadUrl(it)
+            if (!loadFromFile) binding.webView.loadUrl(it)
         }
 
     }
@@ -120,7 +137,11 @@ class FullArticleActivity : AppCompatActivity() {
             "output_1" + ".pdf",
             object : PdfPrint.CallbackPrint {
                 override fun success(path: String) {
-                    showInfoToast("saved")
+                    showInfoToast("Saved")
+                    article?.savedPath = path
+                    article?.let {
+                        saveArticle(it)
+                    }
                 }
 
                 override fun onFailure() {
@@ -128,6 +149,12 @@ class FullArticleActivity : AppCompatActivity() {
                 }
             })
 
+    }
+
+    private fun saveArticle(article: Article) {
+        Coroutine.IO {
+            productDao.insert(article)
+        }
     }
 
     private fun showOption(view: View?) {
@@ -141,15 +168,19 @@ class FullArticleActivity : AppCompatActivity() {
     }
 
     private fun loadArchive() {
-        /*
-          binding.webView.loadUrl("file:///" + Environment.getExternalStorageDirectory() + File.separator + "myArchive" + ".pdf")
-          */
-
+        binding.webView.visibility = View.GONE
+/*
         val f =
-            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/PDFTest/").path + "output_1" + ".pdf")
-        binding.webView.loadUrl(
-            Uri.fromFile(f).toString()
-        )
+            File("" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/PDFTest/") + "/output_1" + ".pdf")
+*/
+        article?.savedPath?.let {
+            val f = File(it)
+            Log.i("fileser", f.path.toString())
+            binding.newPdf.fromFile(f).password(null).defaultPage(0).onPageError { page, _ ->
+                showErrorToast("error")
+            }.load()
+        }
+
     }
 
 }

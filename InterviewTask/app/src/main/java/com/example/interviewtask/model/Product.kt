@@ -16,14 +16,12 @@ description
 regular price
 sale price
 product photo (image)
-colors (array)
+colors (array)    loadFromFile =
 stores (dictionary)
 */
 
-@Entity(tableName = "Product")
 @Parcelize
 data class Product(
-    @PrimaryKey(autoGenerate = true)
     val id: Int? = 0,
     val name: String?,
     val description: String?,

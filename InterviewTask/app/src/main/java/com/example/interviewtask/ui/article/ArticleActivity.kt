@@ -2,7 +2,9 @@ package com.example.interviewtask.ui.article
 
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -47,15 +49,34 @@ class ArticleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //  Thread.setDefaultUncaughtExceptionHandler(ExceptionHandler(this))
         binding = ActivityShowProductBinding.inflate(layoutInflater)
-               setContentView(binding.root)
+        setContentView(binding.root)
         binding.header.title.text = "Top Headlines"
         initDatabase()
         binding.vm = viewModel
         initRV()
         listenClicks()
         setObserver()
-        //viewModel.getProductList()
-        viewModel.getTopHeadLines()
+        //viewModel.getProductList
+        if (isNetworkAvailable()) {
+            viewModel.getTopHeadLines()
+            localDataLoaded = false
+        } else {
+            localDataLoaded = true
+            productDao.getArticleList().observe(this, Observer {
+                if (it.isNotEmpty()) {
+                    articleAdapter?.setList(it as ArrayList<Article>)
+                }
+            })
+        }
+    }
+
+    private var localDataLoaded = false
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
 
