@@ -73,23 +73,25 @@ class ArticleActivity : AppCompatActivity() {
     private fun loadSavedArticle() {
         binding.progress.visibility = View.VISIBLE
         productDao.getArticleList().observe(this, Observer {
+            binding.progress.visibility = View.GONE
             if (it.isNotEmpty()) {
                 binding.header.title.text = getString(R.string.saved_post)
                 localDataLoaded = true
-
             } else {
                 showToast("No Saved Post")
                 if (isNetworkAvailable()) {
                     binding.header.title.text = getString(R.string.top_headlines)
-                    getLatestHeadlines()
                     localDataLoaded = false
+                    if (articleAdapter?.getList()?.isEmpty() == true){
+                        getLatestHeadlines()
+                        return@Observer
+                    }
                 } else {
                     binding.header.title.text = getString(R.string.saved_post)
                     localDataLoaded = true
                 }
             }
             setListInAdapter(it as ArrayList<Article>)
-            binding.progress.visibility = View.GONE
         })
     }
 

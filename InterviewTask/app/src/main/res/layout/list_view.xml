@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:onClick="@{v->callback.onViewClick(v,pos,bean)}"
             android:paddingHorizontal="@dimen/_5sdp"
-            android:text='@{"Source:"+bean.source.name}'
+            android:text='@{bean.source.name}'
             android:textAlignment="viewStart"
             android:textColor="@color/colorPrimary_light"
             app:layout_constraintEnd_toStartOf="@+id/tvTime"
