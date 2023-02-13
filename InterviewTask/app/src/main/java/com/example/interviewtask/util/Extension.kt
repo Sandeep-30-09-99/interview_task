@@ -17,15 +17,21 @@ fun Activity.showSuccessToast(message: String) {
 }
 
 fun Fragment.showToast(message: String) {
-    Toast.makeText(this.context, message, Toast.LENGTH_LONG).show()
+    Toast.makeText(this.context, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Activity.showToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
 fun Fragment.showInfoToast(message: String) {
     MyToast.info(this.requireContext(), message, Toast.LENGTH_SHORT, true).show()
 }
+
 fun Fragment.showErrorToast(message: String) {
     MyToast.error(this.requireContext(), message, Toast.LENGTH_SHORT, true).show()
 }
+
 fun Activity.showErrorToast(message: String) {
     MyToast.error(this, message, Toast.LENGTH_SHORT, true).show()
 }

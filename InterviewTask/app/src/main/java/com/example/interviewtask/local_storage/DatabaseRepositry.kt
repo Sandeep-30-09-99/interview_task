@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class DatabaseRepositry
 @Inject constructor(
-    private val dao: ProductDao
+    private val dao: ArticleDao
 ) {
 
     suspend fun saveProduct(note: Article) = dao.insert(note)

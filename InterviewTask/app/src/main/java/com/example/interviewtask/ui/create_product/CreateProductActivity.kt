@@ -19,8 +19,8 @@ import androidx.core.net.toUri
 import com.example.interviewtask.R
 import com.example.interviewtask.databinding.ActivityCreateProductBinding
 import com.example.interviewtask.databinding.LayoutOkBinding
-import com.example.interviewtask.local_storage.ProductDao
-import com.example.interviewtask.local_storage.ProductDatabase
+import com.example.interviewtask.local_storage.ArticleDao
+import com.example.interviewtask.local_storage.ArticleDatabase
 
 import com.example.interviewtask.model.Product
 import com.example.interviewtask.util.Constant
@@ -45,9 +45,9 @@ class CreateProductActivity : AppCompatActivity() {
         }
     }
 
-    lateinit var productDao: ProductDao
+    lateinit var productDao: ArticleDao
     private fun initDatabase() {
-        productDao = ProductDatabase.getInstance(this).noteDao()
+        productDao = ArticleDatabase.getInstance(this).noteDao()
     }
 
 
@@ -129,7 +129,7 @@ class CreateProductActivity : AppCompatActivity() {
                 colors = null
             )
             Coroutine.IO {
-                productDao.update(p)
+              //  productDao.update(p)
             }
         }
     }
@@ -180,7 +180,7 @@ class CreateProductActivity : AppCompatActivity() {
                 colors = null
             )
             Coroutine.IO {
-                productDao.insert(p)
+                //productDao.insert(p)
             }
         }
     }
@@ -189,8 +189,6 @@ class CreateProductActivity : AppCompatActivity() {
 
 
     private lateinit var allGranted: ArrayList<Boolean>
-
-
     private val permissionResultLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()

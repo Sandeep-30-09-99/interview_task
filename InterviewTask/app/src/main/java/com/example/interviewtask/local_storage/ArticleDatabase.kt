@@ -7,28 +7,27 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.interviewtask.model.Article
-import com.example.interviewtask.model.Product
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Article::class], version =4)
-@TypeConverters(TConverter::class)
-abstract class ProductDatabase : RoomDatabase() {
+@Database(entities = [Article::class], version = 4)
+@TypeConverters(Converters::class)
+abstract class ArticleDatabase : RoomDatabase() {
 
-    abstract fun noteDao(): ProductDao
+    abstract fun noteDao(): ArticleDao
 
     companion object {
-        private var instance: ProductDatabase? = null
+        private var instance: ArticleDatabase? = null
 
         const val PRODUCT_DATABASE = "Product_Database"
 
 
         @Synchronized
-        fun getInstance(ctx: Context): ProductDatabase {
+        fun getInstance(ctx: Context): ArticleDatabase {
             if (instance == null) {
                 instance = Room.databaseBuilder(
-                    ctx.applicationContext, ProductDatabase::class.java,
+                    ctx.applicationContext, ArticleDatabase::class.java,
                     PRODUCT_DATABASE
                 )
                     .fallbackToDestructiveMigration()
@@ -48,7 +47,7 @@ abstract class ProductDatabase : RoomDatabase() {
             }
         }
 
-        private fun populateDatabase(db: ProductDatabase) {
+        private fun populateDatabase(db: ArticleDatabase) {
             val noteDao = db.noteDao()
             CoroutineScope(Dispatchers.IO).launch {
                 //   noteDao.insert(Product(1, "Coffee", "Drinkable Product", 15.20F, 10F, null, null))

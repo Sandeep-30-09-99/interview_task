@@ -2,19 +2,20 @@ package com.example.interviewtask.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.interviewtask.R
 import com.example.interviewtask.databinding.ListViewBinding
 import com.example.interviewtask.model.Article
-import com.example.interviewtask.model.Product
+import com.example.interviewtask.ui.article.ArticleActivity
 
-class ProductAdapter(val context: Context, val listener: AdapterCallback) :
-    RecyclerView.Adapter<ProductAdapter.Holder>() {
+class ArticleAdapter(val context: Context, val listener: AdapterCallback) :
+    RecyclerView.Adapter<ArticleAdapter.Holder>() {
 
     private var list = ArrayList<Article>()
 
@@ -32,10 +33,14 @@ class ProductAdapter(val context: Context, val listener: AdapterCallback) :
         val binding = DataBindingUtil.inflate<ListViewBinding>(
             LayoutInflater.from(parent.context), R.layout.list_view, parent, false
         )
+
         return Holder(binding)
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
+        Log.i("dsfsf", ArticleActivity.localDataLoaded.toString())
+        holder.binding.ivDelete.visibility =
+            if (ArticleActivity.localDataLoaded) View.VISIBLE else View.GONE
         holder.binding.bean = list[position]
         holder.binding.pos = position
         holder.binding.callback = listener
@@ -43,11 +48,6 @@ class ProductAdapter(val context: Context, val listener: AdapterCallback) :
 
     fun getList(): ArrayList<Article> {
         return this.list
-    }
-
-    fun removeAt(position: Int) {
-        this.list.removeAt(position)
-        notifyItemRemoved(position)
     }
 
 
@@ -59,5 +59,13 @@ class ProductAdapter(val context: Context, val listener: AdapterCallback) :
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    fun deletePos(pos: Int) {
+        if (list.isNotEmpty() && list.size > pos) {
+            this.list.removeAt(pos)
+            notifyItemRemoved(pos)
+        }
+
     }
 }

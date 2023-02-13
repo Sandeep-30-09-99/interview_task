@@ -1,10 +1,10 @@
 package com.example.interviewtask.ui.view_photo
 
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -16,17 +16,19 @@ import android.view.MenuItem
 import android.view.View
 import android.webkit.*
 import android.widget.PopupMenu
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.example.interviewtask.R
 import com.example.interviewtask.databinding.ActivityViewPhotoBinding
-import com.example.interviewtask.local_storage.ProductDao
-import com.example.interviewtask.local_storage.ProductDatabase
+import com.example.interviewtask.databinding.LayoutOkBinding
+import com.example.interviewtask.local_storage.ArticleDao
+import com.example.interviewtask.local_storage.ArticleDatabase
 import com.example.interviewtask.model.Article
-import com.example.interviewtask.util.Constant
-import com.example.interviewtask.util.Coroutine
-import com.example.interviewtask.util.showErrorToast
-import com.example.interviewtask.util.showInfoToast
+import com.example.interviewtask.util.*
+import com.example.interviewtask.util.dialog.BaseCustomDialog
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import java.util.ArrayList
 
 
 @AndroidEntryPoint
@@ -45,9 +47,9 @@ class FullArticleActivity : AppCompatActivity() {
 
 
     private var loadFromFile: Boolean = false
-    lateinit var productDao: ProductDao
+    lateinit var productDao: ArticleDao
     private fun initDatabase() {
-        productDao = ProductDatabase.getInstance(this).noteDao()
+        productDao = ArticleDatabase.getInstance(this).noteDao()
     }
 
     private var article: Article? = null
@@ -57,33 +59,32 @@ class FullArticleActivity : AppCompatActivity() {
         binding = ActivityViewPhotoBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.webView.settings.domStorageEnabled
-        binding.header.threeDot.visibility = View.VISIBLE
-        binding.header.title.text = "Article"
+        binding.header.threeDot.visibility = if (loadFromFile) View.GONE else View.VISIBLE
+        binding.header.title.text = if (loadFromFile) "Saved Article" else "Article "
         getIntentExtras()
+        initPermissionRequiredForTaskDialog()
+
         initDatabase()
         setClickListener()
-        if (Build.VERSION.SDK_INT >= 30) {
-            if (!Environment.isExternalStorageManager()) {
-                val getpermission = Intent()
-                getpermission.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
-                startActivity(getpermission)
-            }
-        }
+
         binding.webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 view.loadUrl(url)
+
                 return true
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 binding.webView.visibility = View.VISIBLE
+                binding.progress.visibility = View.VISIBLE
                 super.onPageStarted(view, url, favicon)
             }
 
             override fun onPageFinished(view: WebView, url: String) {
-                super.onPageFinished(view, url)
                 binding.progress.visibility = View.GONE
+                super.onPageFinished(view, url)
             }
+
         }
         binding.webView.setInitialScale(1)
         binding.webView.settings.allowContentAccess = true
@@ -101,7 +102,16 @@ class FullArticleActivity : AppCompatActivity() {
 
     private fun setClickListener() {
         binding.header.threeDot.setOnClickListener {
-            showOption(it)
+            checkForPermission()
+        }
+    }
+
+
+    private fun checkForPermission() {
+        if (!hasPermissions(this, permissions)) {
+            permissionResultLauncher.launch(permissions)
+        } else {
+            showOption(binding.header.threeDot)
         }
     }
 
@@ -124,6 +134,84 @@ class FullArticleActivity : AppCompatActivity() {
 
     }
 
+    private val permissions = arrayOf(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
+
+    private var permissionDeniedDialog: BaseCustomDialog<LayoutOkBinding>? = null
+    private fun initPermissionRequiredForTaskDialog() {
+        permissionDeniedDialog = BaseCustomDialog(this, R.layout.layout_ok) {
+            when (it.id) {
+                R.id.tvOk -> {
+                    permissionDeniedDialog?.cancel()
+                    if (!manageFilePermissionDenied) {
+                        launchForManageFilePermission()
+                    } else {
+                        permissionResultLauncher.launch(permissions)
+                    }
+                }
+            }
+        }
+        permissionDeniedDialog?.binding?.tvTitle?.text = getString(R.string.neccessary_permission)
+        permissionDeniedDialog?.setCancelable(true)
+    }
+
+
+    private lateinit var allGranted: ArrayList<Boolean>
+    private val permissionResultLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        allGranted = ArrayList<Boolean>()// Handle Permission granted/rejected
+        permissions.entries.forEach {
+            it.key
+            val isGranted = it.value
+            allGranted.add(isGranted)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (shouldShowRequestPermissionRationale(it.key)) {
+                    permissionDeniedDialog?.show()
+                } else if (!it.value) {
+                    showToast("Go To Setting to enable permission.")
+                }
+            } else {
+                if (!it.value) {
+                    showToast("Go To Setting to enable permission.")
+                }
+            }
+        }
+        if (!allGranted.contains(false)) {
+            if (Build.VERSION.SDK_INT >= 30) {
+                if (!Environment.isExternalStorageManager()) {
+                    launchForManageFilePermission()
+                }
+            } else {
+                showOption(binding.header.threeDot)
+            }
+        }
+    }
+
+
+    private var manageFilePermissionDenied = true
+    private val launcher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (Build.VERSION.SDK_INT >= 30) {
+                if (!Environment.isExternalStorageManager()) {
+                    manageFilePermissionDenied = false
+                    permissionDeniedDialog?.show()
+                } else {
+                    showOption(binding.header.threeDot)
+                }
+            } else {
+                showOption(binding.header.threeDot)
+            }
+        }
+
+
+    private fun launchForManageFilePermission() {
+        val getpermission = Intent()
+        getpermission.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+        launcher.launch(getpermission)
+    }
+
 
     private fun saveWebPage() {
         val attributes = PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4)
@@ -134,10 +222,10 @@ class FullArticleActivity : AppCompatActivity() {
         val pdfPrint = PdfPrint(attributes)
         pdfPrint.print(binding.webView.createPrintDocumentAdapter("task_document"),
             path,
-            "output_1" + ".pdf",
+            "output_${System.currentTimeMillis()}" + ".pdf",
             object : PdfPrint.CallbackPrint {
                 override fun success(path: String) {
-                    showInfoToast("Saved")
+                    showToast("Saved")
                     article?.savedPath = path
                     article?.let {
                         saveArticle(it)
@@ -145,7 +233,7 @@ class FullArticleActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure() {
-                    showErrorToast("failed")
+                    showToast("failed")
                 }
             })
 
@@ -169,15 +257,11 @@ class FullArticleActivity : AppCompatActivity() {
 
     private fun loadArchive() {
         binding.webView.visibility = View.GONE
-/*
-        val f =
-            File("" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/PDFTest/") + "/output_1" + ".pdf")
-*/
         article?.savedPath?.let {
             val f = File(it)
             Log.i("fileser", f.path.toString())
-            binding.newPdf.fromFile(f).password(null).defaultPage(0).onPageError { page, _ ->
-                showErrorToast("error")
+            binding.newPdf.fromFile(f).password(null).defaultPage(0).onPageError { page, e ->
+                showToast(e.localizedMessage.toString())
             }.load()
         }
 

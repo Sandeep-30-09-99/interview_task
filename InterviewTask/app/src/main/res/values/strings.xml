@@ -8,5 +8,8 @@
     <string name="app_description"><![CDATA[O On-Time Departures. Pay just for your seat. No Refusal from our end. Spacious & Comfortable Seating. Female passengers safety standards. Onboard Refreshments. Cab Tracking through Maps]]></string>
     <string name="best_mrk">Best MarketPlace</string>
     <string name="phone_number">Phone Number</string>
+    <string name="saved_post">Saved Post</string>
+    <string name="top_headlines">Top Headlines</string>
+    <string name="no_data_found">No Data Found!</string>
 
 </resources>

@@ -19,6 +19,7 @@
         android:id="@+id/toast_text"
         style="@style/TextView.Large"
         android:gravity="center"
-        android:textSize="@dimen/_15ssp" />
+        android:paddingVertical="@dimen/_1sdp"
+        android:textSize="@dimen/_12ssp" />
 
 </LinearLayout>

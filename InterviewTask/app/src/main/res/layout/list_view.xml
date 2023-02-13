@@ -24,18 +24,20 @@
         android:padding="10dp">
 
 
-
         <ImageView
             android:id="@+id/ivDelete"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="5dp"
+            android:background="@drawable/background_10_rounded"
+            android:backgroundTint="@color/colorPrimary"
+            android:elevation="@dimen/_12sdp"
             android:onClick="@{v->callback.onViewClick(v,pos,bean)}"
-            android:padding="3dp"
+            android:padding="@dimen/_5sdp"
             android:src="@drawable/ic_delete"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:tint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/ivEdit"
@@ -98,6 +100,7 @@
             android:paddingHorizontal="@dimen/_5sdp"
             android:text='@{"Source:"+bean.source.name}'
             android:textAlignment="viewStart"
+            android:textColor="@color/colorPrimary_light"
             app:layout_constraintEnd_toStartOf="@+id/tvTime"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvHeadLine"
@@ -113,6 +116,7 @@
             android:onClick="@{v->callback.onViewClick(v,pos,bean)}"
             android:paddingHorizontal="@dimen/_5sdp"
             android:textAlignment="viewEnd"
+            android:textColor="@color/colorPrimary_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvSourceName"
             app:layout_constraintTop_toBottomOf="@+id/tvHeadLine"
